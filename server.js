@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "http://localhost:8080"
 };
 
 app.use(cors(corsOptions));
@@ -14,6 +14,8 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+var usersRouter = require('./app/routes/users');
+var productRouter = require('./app/routes/products')
 
 const db = require("./app/models");
 db.mongoose
@@ -34,7 +36,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
 
-require("./app/routes/turorial.routes")(app);
+app.use('/users', usersRouter);
+app.use('/products', productRouter);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
